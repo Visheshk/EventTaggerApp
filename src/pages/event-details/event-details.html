@@ -1,0 +1,75 @@
+<!--
+  Generated template for the EventDetailsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{item}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <form [formGroup]="detailsForm" (ngSubmit)="onSubmit(detailsForm.value)">
+    <ion-list>
+      <ion-item>
+        <ion-label color="primary">Notes</ion-label>
+        <ion-input formControlName="notes" placeholder="Notes here"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label color="primary">Tags</ion-label>
+        <ion-select formControlName="tags" multiple="true">
+          <ion-option>Positively</ion-option>
+          <ion-option>Negatively</ion-option>
+          <ion-option>Willingly</ion-option>
+          <ion-option>Reluctantly</ion-option>
+          <ion-option>With Encouragement</ion-option>
+          <ion-option>Independently</ion-option>
+          <ion-option>Riskily</ion-option>
+          <ion-option>Half-Heartedly</ion-option>
+        </ion-select>
+      </ion-item>
+
+      <!-- <ion-item>
+        <ion-label color="primary" fixed>Tags:</ion-label>
+        <ion-input formControlName="tags" type="text" placeholder="tags"></ion-input>
+      </ion-item> -->
+
+      <ion-item>
+        <ion-label color="primary">Photos</ion-label>
+        
+      </ion-item>
+
+      <!-- <button ion-button type="submit" block full (click)="formSubmit($event)">Start Day</button> -->
+      
+    </ion-list>
+
+    <ion-card>
+      <ion-card-content>
+        <ion-card-title>
+          <button ion-button primary (click)="stopRecord()" *ngIf="recording"><ion-icon name="mic-off"></ion-icon>&nbsp;&nbsp;Stop Record</button>
+          <button ion-button primary (click)="startRecord()" *ngIf="!recording"><ion-icon name="mic"></ion-icon>&nbsp;&nbsp;Start Record</button>
+        </ion-card-title>
+        <progress max="100" [value]="(uploadProgress | async)"></progress>
+          <div class="result" *ngIf="uploadURL | async; let uploadSrc">
+            <a [href]="uploadSrc">You just uploaded this file!</a>
+          </div>
+      </ion-card-content>
+    </ion-card>
+    <ion-list>
+      <ion-item *ngFor="let audio of audioList; index as i;">
+        <p>{{audio.filename}}</p>
+        <button ion-button clear item-end large (click)="playAudio(audio.filename, i)"><ion-icon name="play"></ion-icon></button>
+      </ion-item>
+    </ion-list>
+
+    <button ion-button type="submit" [disabled]="!detailsForm.valid" block full>Submit Note</button>
+  </form>
+
+</ion-content>

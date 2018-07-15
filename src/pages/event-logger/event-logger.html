@@ -1,0 +1,26 @@
+<!--
+  Generated template for the EventLoggerPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Note Events here!</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ng-container *ngFor="let a of actions">
+    <ion-list>
+      <ion-list-header>{{a.theme}}</ion-list-header>
+      <button ion-item *ngFor="let act of a.acts" (click)="addEvent(act, a.theme)" >
+        {{act}}
+      </button>
+    </ion-list>
+
+  </ng-container>
+</ion-content>
