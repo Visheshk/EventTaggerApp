@@ -45,21 +45,26 @@ export class HelloIonicPage {
     console.log(error);
   }
 
+  chooseEvent(themes, eventKey) {
+    console.log(themes, eventKey);
+    this.nav.push(EventLoggerPage, {"themes": themes, "eventID": eventKey});
+  }
+
   onSubmit(value: any): void { 
     console.log(this.events);
-
-    // this.eventList.push({
-    //   "eventCode": value.event,
-    //   "eventOrganizer": value.name,
-    //   "themes": value.themes,
-    //   "activities": value.activities
-    // });
+    var pushkey = "";
+    this.eventList.push({
+      "eventCode": value.event,
+      "eventOrganizer": value.name,
+      "themes": value.themes,
+      "activities": value.activities
+    }).then( (item) => { pushkey = item.key; } );
     // .catch(error => this.handleError(error));
 
     console.log(value.name);
     //*** DO VALIDATION TO CHECK THAT THEMES HAS SOMETHING SELECTED
 
     //*** GO TO NEXT PAGE WITH REORDERED LIST OPTOINS
-    this.nav.push(EventLoggerPage, {"themes": value.themes, "eventID": "test1"});
+    this.nav.push(EventLoggerPage, {"themes": value.themes, "eventID": pushkey});
   }
 }
