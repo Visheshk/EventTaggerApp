@@ -15,15 +15,30 @@
     </li>
   </ul>
  -->
+
+   <ion-card *ngFor="let item of events | async" (click)="chooseEvent(item.payload.val().themes, item.key)">
+    <!-- <img src="img/nin-live.png"/> -->
+    <ion-card-content>
+      <ion-card-title>
+        Tagger: {{item.payload.val().eventOrganizer}}
+      </ion-card-title>
+      <div class="card-subtitle">Location: {{item.payload.val().eventCode}}</div>
+      <p>
+        Themes: {{item.payload.val().themes}}
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+
   <!-- <ion-content> -->
-  <ion-list>
+<!--   <ion-list>
     <ion-item *ngFor="let item of events | async" (click)="chooseEvent(item.payload.val().themes, item.key)">
       <h3>Location: {{item.payload.val().eventCode}}</h3>
       <h4>
           Coder: {{item.payload.val().eventOrganizer}}  |||   Themes: {{item.payload.val().themes}}
       </h4>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
   <!-- </ion-content> -->
 
 
@@ -38,48 +53,53 @@
   </ng-container>
  -->
   <!-- <form [formGroup]="authForm" (ngSubmit)="logForm()"> -->
-  <form [formGroup]="authForm" (ngSubmit)="onSubmit(authForm.value)">
-    <ion-list>
-      <ion-item>
-        <ion-label color="primary">Where are you?</ion-label>
-        <ion-input formControlName="event" placeholder="Location name/Event code"></ion-input>
-      </ion-item>
+  <ion-card>
+    <ion-card-content>
+      <ion-card-title> New Event Form </ion-card-title>
+      <form [formGroup]="authForm" (ngSubmit)="onSubmit(authForm.value)">
+        <ion-list>
+          <ion-item>
+            <ion-label color="primary">Where are you?</ion-label>
+            <ion-input formControlName="event" placeholder="Location name/Event code"></ion-input>
+          </ion-item>
 
-      <ion-item>
-        <ion-label color="primary" fixed>Your name:</ion-label>
-        <ion-input formControlName="name" type="text" placeholder="Name"></ion-input>
-      </ion-item>
+          <ion-item>
+            <ion-label color="primary" fixed>Your name:</ion-label>
+            <ion-input formControlName="name" type="text" placeholder="Name"></ion-input>
+          </ion-item>
 
-      <ion-item>
-        <ion-label color="primary">Today's learning themes</ion-label>
-        <ion-select formControlName="themes" multiple="true">
-          <ion-option>Engagement</ion-option>
-          <ion-option>Initiative</ion-option>
-          <ion-option>Social Scaffolding</ion-option>
-          <ion-option>Development of Understanding</ion-option>
-        </ion-select>
-      </ion-item>
+          <ion-item>
+            <ion-label color="primary">Today's learning themes</ion-label>
+            <ion-select formControlName="themes" multiple="true">
+              <ion-option>Engagement</ion-option>
+              <ion-option>Initiative</ion-option>
+              <ion-option>Social Scaffolding</ion-option>
+              <ion-option>Development of Understanding</ion-option>
+            </ion-select>
+          </ion-item>
 
-      <ion-item>
-        <ion-label color="primary">Today's activities</ion-label>
-        <ion-select formControlName="activities" multiple="true">
-          <ion-option>Maps & Mazes</ion-option>
-          <ion-option>Cardboard Construction</ion-option>
-          <ion-option>Coding</ion-option>
-          <ion-option>Building (blocks, tubes, strawbeese)</ion-option>
-          <ion-option>Things that Fly</ion-option>
-          <ion-option>Paper Circuits or Circuit Blocks</ion-option>
-          <ion-option>Print making</ion-option>
-          <ion-option>Paper Crafts</ion-option>
-          <ion-option>Costume Crafts</ion-option>
-          <ion-option>Sewing Crafts</ion-option>
-        </ion-select>
-      </ion-item>
+          <ion-item>
+            <ion-label color="primary">Today's activities</ion-label>
+            <ion-select formControlName="activities" multiple="true">
+              <ion-option>Maps & Mazes</ion-option>
+              <ion-option>Cardboard Construction</ion-option>
+              <ion-option>Coding</ion-option>
+              <ion-option>Building (blocks, tubes, strawbeese)</ion-option>
+              <ion-option>Things that Fly</ion-option>
+              <ion-option>Paper Circuits or Circuit Blocks</ion-option>
+              <ion-option>Print making</ion-option>
+              <ion-option>Paper Crafts</ion-option>
+              <ion-option>Costume Crafts</ion-option>
+              <ion-option>Sewing Crafts</ion-option>
+            </ion-select>
+          </ion-item>
 
-      <!-- <button ion-button type="submit" block full (click)="formSubmit($event)">Start Day</button> -->
-      <button ion-button type="submit" [disabled]="!authForm.valid" block full>Start Day</button>
-    </ion-list>
-  </form>
+          <!-- <button ion-button type="submit" block full (click)="formSubmit($event)">Start Day</button> -->
+          <button ion-button type="submit" [disabled]="!authForm.valid" block full>Start Day</button>
+        </ion-list>
+      </form>
+    </ion-card-content>
+  </ion-card>
 
 
 </ion-content>

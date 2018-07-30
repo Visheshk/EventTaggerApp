@@ -45,7 +45,7 @@ export class EventDetailsPage {
     this.theme = navParams.data.theme;
     this.eventID = navParams.data.event;
 
-    this.eventNotes = db.list('EventsDebug1/EventList');
+    this.eventNotes = db.list('EventsDebug1/ActionList');
     this.navCtrl = navCtrl;
 
     this.detailsForm = formBuilder.group({
@@ -70,17 +70,17 @@ export class EventDetailsPage {
   }
 
   startRecord() {
-    if (this.platform.is('ios')) {
-      this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
-      this.filePath = this.file.documentsDirectory.replace(/file:\/\//g, '') + this.fileName;
-      this.audio = this.media.create(this.filePath);
-    } else if (this.platform.is('android')) {
-      this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
-      this.filePath = this.file.externalDataDirectory.replace(/file:\/\//g, '') + this.fileName;
-      this.audio = this.media.create(this.filePath);
-    }
-    this.audio.startRecord();
-    this.recording = true;
+    // if (this.platform.is('ios')) {
+    //   this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
+    //   this.filePath = this.file.documentsDirectory.replace(/file:\/\//g, '') + this.fileName;
+    //   this.audio = this.media.create(this.filePath);
+    // } else if (this.platform.is('android')) {
+    //   this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
+    //   this.filePath = this.file.externalDataDirectory.replace(/file:\/\//g, '') + this.fileName;
+    //   this.audio = this.media.create(this.filePath);
+    // }
+    // this.audio.startRecord();
+    // this.recording = true;
   }
 
   upload(audioFile) {
@@ -117,7 +117,14 @@ export class EventDetailsPage {
   
   onSubmit(value: any): void { 
     console.log(value);
-    this.eventNotes.push({"theme": this.theme, "event": this.eventID, "act": this.item, "notes": value["notes"], "tags": value["tags"]})
+    this.eventNotes.push({
+      "theme": this.theme, 
+      "event": this.eventID, 
+      "epoch": Date.now(),
+      "act": this.item, 
+      "notes": value["notes"], 
+      "tags": value["tags"]
+    })
     //*** DO VALIDATION TO CHECK THAT THEMES HAS SOMETHING SELECTED
 
     //*** GO TO NEXT PAGE WITH REORDERED LIST OPTOINS
