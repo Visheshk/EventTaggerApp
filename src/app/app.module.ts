@@ -4,8 +4,8 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 
-import { CloudinaryModule, CloudinaryConfiguration } from '@cloudinary/angular';
-import { Cloudinary } from 'cloudinary-core';
+// import { CloudinaryModule, CloudinaryConfiguration } from '@cloudinary/angular';
+// import { Cloudinary } from 'cloudinary-core';
 
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
@@ -43,7 +43,7 @@ import { FirebaseProvider } from '../providers/firebase/firebase';
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
-    CloudinaryModule.forRoot({Cloudinary}, { cloud_name: 'visheshk' } as CloudinaryConfiguration),
+    // CloudinaryModule.forRoot({Cloudinary}, { cloud_name: 'visheshk' } as CloudinaryConfiguration),
   ],
   bootstrap: [IonicApp],
   entryComponents: [

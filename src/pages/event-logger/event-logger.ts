@@ -11,7 +11,7 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
  * Ionic pages and navigation.
  */
 
-@IonicPage()
+// @IonicPage()
 @Component({
   selector: 'page-event-logger',
   templateUrl: 'event-logger.html',
