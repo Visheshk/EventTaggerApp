@@ -41,9 +41,9 @@ export class HelloIonicPage {
 
   log(val) { console.log(val); }
 
-  private handleError(error) {
-    console.log(error);
-  }
+  // private handleError(error) {
+  //   console.log(error);
+  // }
 
   chooseEvent(themes, eventKey) {
     console.log(themes, eventKey);

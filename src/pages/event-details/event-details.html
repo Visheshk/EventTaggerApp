@@ -49,13 +49,22 @@
       <!-- <button ion-button type="submit" block full (click)="formSubmit($event)">Start Day</button> -->
       
     </ion-list>
-
+    <ion-card>
+      <ion-card-content>
+        <ion-card-title>
+          <button ion-button primary (click)="takePicture()" ><ion-icon name="camera"></ion-icon>&nbsp;&nbsp;Take Photo</button>
+        </ion-card-title>
+      </ion-card-content>
+      
+    </ion-card>
     <ion-card>
       <ion-card-content>
         <ion-card-title>
           <button ion-button primary (click)="stopRecord()" *ngIf="recording"><ion-icon name="mic-off"></ion-icon>&nbsp;&nbsp;Stop Record</button>
           <button ion-button primary (click)="startRecord()" *ngIf="!recording"><ion-icon name="mic"></ion-icon>&nbsp;&nbsp;Start Record</button>
         </ion-card-title>
+        
+        
         <progress max="100" [value]="(uploadProgress | async)"></progress>
           <div class="result" *ngIf="uploadURL | async; let uploadSrc">
             <a [href]="uploadSrc">You just uploaded this file!</a>

@@ -4,8 +4,8 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 
-// import { CloudinaryModule, CloudinaryConfiguration } from '@cloudinary/angular';
-// import { Cloudinary } from 'cloudinary-core';
+import { CloudinaryModule, CloudinaryConfiguration } from '@cloudinary/angular-5.x';
+import { Cloudinary } from 'cloudinary-core';
 
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
@@ -21,7 +21,10 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Media } from '@ionic-native/media';
+import { Media, MediaObject } from '@ionic-native/media';
+import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions } from '@ionic-native/media-capture';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+
 import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { FirebaseProvider } from '../providers/firebase/firebase';
@@ -43,7 +46,7 @@ import { FirebaseProvider } from '../providers/firebase/firebase';
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
-    // CloudinaryModule.forRoot({Cloudinary}, { cloud_name: 'visheshk' } as CloudinaryConfiguration),
+    CloudinaryModule.forRoot({Cloudinary}, { cloud_name: 'visheshk' } as CloudinaryConfiguration),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -60,6 +63,8 @@ import { FirebaseProvider } from '../providers/firebase/firebase';
     AngularFireDatabase,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     Media,
+    MediaCapture,
+    Camera,
     File,
     FirebaseProvider
   ]

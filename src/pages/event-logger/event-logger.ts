@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { ModalController } from 'ionic-angular';
 import { EventDetailsPage } from '../event-details/event-details';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
@@ -11,7 +11,6 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
  * Ionic pages and navigation.
  */
 
-// @IonicPage()
 @Component({
   selector: 'page-event-logger',
   templateUrl: 'event-logger.html',
