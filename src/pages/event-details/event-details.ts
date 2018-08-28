@@ -224,9 +224,12 @@ export class EventDetailsPage {
 
       // console.log()
       let file = new File();
-      ************KEY LINE***************
-      // this.file.readAsDataURL(this.file.externalDataDirectory, this.audioList[f].filename).then( (snapshot) => );
-      uploadRef.putString(, firebase.storage.StringFormat.DATA_URL).then( (snapshot) => {console.log("audio successful upload")});
+      
+      this.file.readAsDataURL(this.file.externalDataDirectory, this.audioList[f].filename).then( function (audioText) {
+          console.log(audioText);
+          uploadRef.putString(audioText, firebase.storage.StringFormat.DATA_URL).then( (snapshot) => {console.log("audio successful upload")});  
+      });
+      
       // this.storageRef.putString("asdasd");
       
       // console.log(var a = this.audioList);
