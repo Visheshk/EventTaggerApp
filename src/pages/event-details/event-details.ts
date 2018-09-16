@@ -34,8 +34,9 @@ export class EventDetailsPage {
   recording: boolean = false;
   filePath: string;
   fileName: string;
-  recordingList: any[];
+  // recordingList: any[];
   imageList: any[];
+  imageNameList: any[];
   audio: MediaObject;
   audioList: any[] = [];
   uploadProgress: Observable<number>;
@@ -79,10 +80,15 @@ export class EventDetailsPage {
 
   ionViewDidLeave() {
     console.log("leaving ion view");
+
+    //** add a verifier if things not uploaded before exiting view
+
+    //actually delete files on exiting view
     this.audioList = [];
-    this.recordingList = [];
+    // this.recordingList = [];
     // this.recordingList = [];
     this.imageList = [];
+    this.imageNameList = [];
     localStorage.setItem("audiolist", JSON.stringify(this.audioList));
   }
 
@@ -95,10 +101,12 @@ export class EventDetailsPage {
 
   ionViewWillEnter() {
     console.log("entering ion view");
+
     this.audioList = [];
-    this.recordingList = [];
+    // this.recordingList = [];
     // this.recordingList = [];
     this.imageList = [];
+    this.imageNameList = [];
     localStorage.setItem("audiolist", JSON.stringify(this.audioList));
 
     this.getAudioList();
@@ -112,30 +120,40 @@ export class EventDetailsPage {
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     }).then(
-      (imageData) => {this.imageList.push({"image": "data:image/jpeg;base64," + imageData, "fileName": fileName});}, 
+      (imageData) => {
+        this.imageList.push({"image": "data:image/jpeg;base64," + imageData, "fileName": fileName});
+        this.imageNameList.push({"fileName": fileName});
+      }, 
       (err) => {console.log(err)});
+  }
+
+  removePicture(file, idx) {
+    
   }
 
   startRecord() {
     // this.mediaCapture.captureImage({ "limit": 3 })
-    //   .then( (data: MediaFile[]) => console.log(data), (err: CaptureError) => console.error(err) );
-    // if (this.platform.is('ios')) {
-    //   this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
-    //   this.filePath = this.file.documentsDirectory.replace(/file:\/\//g, '') + this.fileName;
-    //   this.audio = this.media.create(this.filePath);
-    // } 
+      // .then( (data: MediaFile[]) => console.log(data), (err: CaptureError) => console.error(err) );
+    if (this.platform.is('ios')) {
+      this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
+      this.filePath = this.file.documentsDirectory.replace(/file:\/\//g, '') + this.fileName;
+      
+    } 
     // else if (this.platform.is('android')) {
-    // else {
-    //   this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
-    //   this.filePath = this.file.externalDataDirectory.replace(/file:\/\//g, '') + this.fileName;
-    //   this.audio = this.media.create(this.filePath);
-    // }
-    this.fileName = 'record-'+ this.eventID + "-theme-" + this.theme + "-act-" + this.item + "-time-" + new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
+    else {
+      this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.wav';
+      this.filePath = this.file.externalDataDirectory.replace(/file:\/\//g, '') + this.fileName;
+
+    }
+    this.audio = this.media.create(this.filePath);
+    // this.fileName = 'record-'+ this.eventID + "-theme-" + this.theme + "-act-" + this.item + "-time-" + new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds();
 
     // this.filePath = this.file.externalDataDirectory.replace(/file:\/\//g, '') + this.fileName;
+    // this.filePath = this.file.externalDataDirectory + this.fileName;
     // if (this.platform.is('ios')) {  
-    this.filePath = this.file.externalDataDirectory + this.fileName;
+    
     // }
+
     this.audio = this.media.create(this.filePath);
     this.audio.startRecord();
     this.recording = true;
@@ -154,7 +172,8 @@ export class EventDetailsPage {
 
   stopRecord() {
     this.audio.stopRecord();
-    let data = { "filename": this.fileName , "filepath": this.filePath};
+    this.audio.release();
+    let data = { "fileName": this.fileName };
     this.audioList.push(data);
     localStorage.setItem("audiolist", JSON.stringify(this.audioList));
     this.recording = false;
@@ -165,20 +184,22 @@ export class EventDetailsPage {
   }
 
   playAudio(file,idx) {
-    // if (this.platform.is('ios')) {
-      // this.filePath = this.file.documentsDirectory.replace(/file:\/\//g, '') + file;
-      // this.audio = this.media.create(this.filePath);
+    if (this.platform.is('ios')) {
+      this.filePath = this.file.documentsDirectory.replace(/file:\/\//g, '') + file;
     // } else if (this.platform.is('android')) {
-      // this.filePath = this.file.externalDataDirectory.replace(/file:\/\//g, '') + file;
-      // this.audio = this.media.create(this.filePath);
-    // }
-    console.log("playing audio");
-    this.filePath = this.file.externalDataDirectory + file;
+    } else {
+      this.filePath = this.file.externalDataDirectory.replace(/file:\/\//g, '') + file;
+    }
+    // this.audio = this.media.create(this.filePath);
+    // console.log("playing audio");
+    // this.filePath = this.file.externalDataDirectory + file;
     this.audio = this.media.create(this.filePath);
     this.audio.play();
     console.log(this.audioList);
     // this.audio.setVolume(0.8);
   }
+
+  removeAudio(file, idc)
 
   // private startUpload() {
 
@@ -195,7 +216,8 @@ export class EventDetailsPage {
       "act": this.item, 
       "notes": value["notes"], 
       "tags": value["tags"],
-      "recordingList": this.recordingList
+      "audioList": this.audioList,
+      "imageList": this.imageNameList
     }).then( (item) => { actKey = item.key; } );
     //*** DO VALIDATION TO CHECK THAT THEMES HAS SOMETHING SELECTED
 
@@ -205,7 +227,7 @@ export class EventDetailsPage {
       console.log("uploading audio list");
       // console.log(this.audioList);
       // var path = this.eventID + "/" + actKey + "/" + this.audioList[f].filename;
-      var path = this.eventID + "/" + this.audioList[f].filename;
+      var path = this.eventID + "/" + this.audioList[f].fileName;
 
       
       // const customMetadata = { 
