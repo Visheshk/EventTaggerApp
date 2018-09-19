@@ -135,7 +135,7 @@ export class EventDetailsPage {
     // this.mediaCapture.captureImage({ "limit": 3 })
       // .then( (data: MediaFile[]) => console.log(data), (err: CaptureError) => console.error(err) );
     if (this.platform.is('ios')) {
-      this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.3gp';
+      this.fileName = 'record'+new Date().getDate()+new Date().getMonth()+new Date().getFullYear()+new Date().getHours()+new Date().getMinutes()+new Date().getSeconds()+'.wav';
       this.filePath = this.file.documentsDirectory.replace(/file:\/\//g, '') + this.fileName;
       
     } 
@@ -199,7 +199,9 @@ export class EventDetailsPage {
     // this.audio.setVolume(0.8);
   }
 
-  removeAudio(file, idc)
+  removeAudio(file, idc) {
+
+  }
 
   // private startUpload() {
 
@@ -246,9 +248,15 @@ export class EventDetailsPage {
 
       // console.log()
       let file = new File();
-      
-      this.file.readAsDataURL(this.file.externalDataDirectory, this.audioList[f].filename).then( function (audioText) {
-          console.log(audioText);
+      var fPath = this.file.externalDataDirectory;
+      if (this.platform.is('ios')) {
+        fPath = this.file.documentsDirectory.replace(/file:\/\//g, '');
+        // fPath = this.file.documentsDirectory;
+      }
+
+      this.file.readAsDataURL(fPath, this.audioList[f].filename).then( function (audioText) {
+          // console.log(audioText);
+          console.log("reading audio data");
           uploadRef.putString(audioText, firebase.storage.StringFormat.DATA_URL).then( (snapshot) => {console.log("audio successful upload")});  
       });
       
@@ -267,7 +275,7 @@ export class EventDetailsPage {
 
     for (var i in this.imageList) {
       console.log("uploading image list");
-      console.log(this.imageList);
+      // console.log(this.imageList);
 
       // var path = this.eventID + "/" +  actKey + "/" + this.imageList[i].fileName;
       var path = this.eventID + "/" + this.imageList[i].fileName;
@@ -282,7 +290,7 @@ export class EventDetailsPage {
       this.storageRef = firebase.storage().ref();
       var uploadRef = this.storageRef.child(path);
       // console.log(this.imageList[i].image);
-      console.log(this.imageList[i].fileName);
+      // console.log(this.imageList[i].fileName);
       uploadRef.putString(this.imageList[i].image, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {console.log("successful upload")});
     }
     
