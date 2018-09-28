@@ -250,15 +250,17 @@ export class EventDetailsPage {
       let file = new File();
       var fPath = this.file.externalDataDirectory;
       if (this.platform.is('ios')) {
-        fPath = this.file.documentsDirectory.replace(/file:\/\//g, '');
-        // fPath = this.file.documentsDirectory;
+        // fPath = this.file.documentsDirectory.replace(/file:\/\//g, '');
+        fPath = this.file.documentsDirectory;
       }
-
-      this.file.readAsDataURL(fPath, this.audioList[f].filename).then( function (audioText) {
+      // console.log("file\:\/\/" + fPath);
+      // var fpath1 = String("file\:\/\/" + fPath);
+      console.log(fpath1 + typeof(fpath1));
+      this.file.readAsText(fPath, this.audioList[f].filename).then( function (audioText) {
           // console.log(audioText);
           console.log("reading audio data");
           uploadRef.putString(audioText, firebase.storage.StringFormat.DATA_URL).then( (snapshot) => {console.log("audio successful upload")});  
-      });
+      }).catch(err => {console.log(err)});
       
       // this.storageRef.putString("asdasd");
       
