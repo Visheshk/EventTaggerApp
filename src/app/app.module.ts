@@ -28,6 +28,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File } from '@ionic-native/file';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { FirebaseProvider } from '../providers/firebase/firebase';
+import { Base64 } from '@ionic-native/base64';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { FirebaseProvider } from '../providers/firebase/firebase';
     MediaCapture,
     Camera,
     File,
-    FirebaseProvider
+    FirebaseProvider,
+    Base64
   ]
 })
 export class AppModule {}

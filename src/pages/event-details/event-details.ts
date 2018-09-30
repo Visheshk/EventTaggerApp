@@ -9,6 +9,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
+import { Base64 } from '@ionic-native/base64';
 
 import { Observable } from 'rxjs/Observable';
 import * as firebase from 'firebase';
@@ -55,12 +56,13 @@ export class EventDetailsPage {
 
   // let options: CaptureImageOptions = { limit: 3 };
   
-  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public media: Media, private file: File, public platform: Platform, db: AngularFireDatabase, private afStorage: AngularFireStorage, private camera: Camera) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public media: Media, private file: File, public platform: Platform, db: AngularFireDatabase, private afStorage: AngularFireStorage, private camera: Camera, private base64: Base64) {
 
     this.item = navParams.data.item;
     this.theme = navParams.data.theme;
     this.eventID = navParams.data.event;
     this.storage =  afStorage;
+    this.base64 = base64;
 
     this.eventNotes = db.list('EventsDebug1/ActionList');
     this.navCtrl = navCtrl;
@@ -247,20 +249,30 @@ export class EventDetailsPage {
       var uploadRef = this.storageRef.child(path);
 
       // console.log()
-      let file = new File();
+      // let file = new File();
       var fPath = this.file.externalDataDirectory;
+      
+
       if (this.platform.is('ios')) {
         // fPath = this.file.documentsDirectory.replace(/file:\/\//g, '');
         fPath = this.file.documentsDirectory;
+        console.log(this.audioList[f].fileName);
+        // this.base64.encodeFile(fPath + this.audioList[f].fileName).then((base64File: string) => {
+        //   console.log(base64File);
+        // }, (err) => {
+        //   console.log(err);
+        // })
       }
-      // console.log("file\:\/\/" + fPath);
-      // var fpath1 = String("file\:\/\/" + fPath);
-      console.log(fpath1 + typeof(fpath1));
-      this.file.readAsText(fPath, this.audioList[f].filename).then( function (audioText) {
-          // console.log(audioText);
-          console.log("reading audio data");
-          uploadRef.putString(audioText, firebase.storage.StringFormat.DATA_URL).then( (snapshot) => {console.log("audio successful upload")});  
-      }).catch(err => {console.log(err)});
+      // else {
+        this.file.readAsDataURL(fPath, this.audioList[f].fileName).then( function (audioText) {
+            // console.log(audioText);
+            console.log("reading audio data");
+            uploadRef.putString(audioText, firebase.storage.StringFormat.DATA_URL).then( (snapshot) => {
+              console.log("audio successful upload")
+            });  
+        }).catch(err => {console.log(err)});
+      // }
+
       
       // this.storageRef.putString("asdasd");
       
