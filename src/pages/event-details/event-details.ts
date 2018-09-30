@@ -9,9 +9,9 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
-import { Base64 } from '@ionic-native/base64';
 
 import { Observable } from 'rxjs/Observable';
+import { forkJoin } from "rxjs/observable/forkJoin";
 import * as firebase from 'firebase';
 
 /**
@@ -36,7 +36,7 @@ export class EventDetailsPage {
   filePath: string;
   fileName: string;
   // recordingList: any[];
-  imageList: any[];
+  imageList: any[] = [];
   imageNameList: any[];
   audio: MediaObject;
   audioList: any[] = [];
@@ -50,19 +50,20 @@ export class EventDetailsPage {
   storageRef: any;
   task: AngularFireUploadTask;
 
+  uploadPromises: Promise<any>[];
+
   // audioFile: Promise<MediaFile[]>;
 
   tags = ['positively', 'negatively', 'willingly', 'reluctantly', 'with encouragement', 'independently', 'riskily', 'half-heartedly'];
 
   // let options: CaptureImageOptions = { limit: 3 };
   
-  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public media: Media, private file: File, public platform: Platform, db: AngularFireDatabase, private afStorage: AngularFireStorage, private camera: Camera, private base64: Base64) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public media: Media, private file: File, public platform: Platform, db: AngularFireDatabase, private afStorage: AngularFireStorage, private camera: Camera) {
 
     this.item = navParams.data.item;
     this.theme = navParams.data.theme;
     this.eventID = navParams.data.event;
     this.storage =  afStorage;
-    this.base64 = base64;
 
     this.eventNotes = db.list('EventsDebug1/ActionList');
     this.navCtrl = navCtrl;
@@ -86,15 +87,16 @@ export class EventDetailsPage {
     //** add a verifier if things not uploaded before exiting view
 
     //actually delete files on exiting view
-    this.audioList = [];
+    // this.audioList = [];
     // this.recordingList = [];
     // this.recordingList = [];
-    this.imageList = [];
-    this.imageNameList = [];
-    localStorage.setItem("audiolist", JSON.stringify(this.audioList));
+    // this.imageList = [];
+    // this.imageNameList = [];
+    // localStorage.setItem("audiolist", JSON.stringify(this.audioList));
   }
 
   getAudioList() {
+    console.log("getting audio list");
     if(localStorage.getItem("audiolist")) {
       this.audioList = JSON.parse(localStorage.getItem("audiolist"));
       // console.log(this.audioList);
@@ -104,14 +106,14 @@ export class EventDetailsPage {
   ionViewWillEnter() {
     console.log("entering ion view");
 
-    this.audioList = [];
+    // this.audioList = [];
     // this.recordingList = [];
     // this.recordingList = [];
-    this.imageList = [];
-    this.imageNameList = [];
-    localStorage.setItem("audiolist", JSON.stringify(this.audioList));
+    // this.imageList = [];
+    // this.imageNameList = [];
+    // localStorage.setItem("audiolist", JSON.stringify(this.audioList));
 
-    this.getAudioList();
+    // this.getAudioList();
   }
 
   takePicture() {
@@ -125,6 +127,7 @@ export class EventDetailsPage {
       (imageData) => {
         this.imageList.push({"image": "data:image/jpeg;base64," + imageData, "fileName": fileName});
         this.imageNameList.push({"fileName": fileName});
+        console.log(this.imageList);
       }, 
       (err) => {console.log(err)});
   }
@@ -182,6 +185,7 @@ export class EventDetailsPage {
     // this.recordingList.push({"filename": this.fileName, "filePath": this.filePath});
     this.getAudioList();
     // this.upload(this.audio);
+    console.log(this.audioList);
 
   }
 
@@ -201,18 +205,53 @@ export class EventDetailsPage {
     // this.audio.setVolume(0.8);
   }
 
-  removeAudio(file, idc) {
+  public deleteFile(fName, index, ftype) {
+    console.log("deleting file");
+    var fPath = this.file.externalDataDirectory;
+    console.log(fName);
+    if (this.platform.is('ios')) {
+      fPath = this.file.documentsDirectory;      
+    }
 
+    if (ftype == "aud") {
+      this.file.removeFile(fPath, fName).then( (res) => {
+        console.log("successful audio remove"); 
+        console.log(this.audioList);
+        this.audioList = this.audioList.splice(0, index).concat(this.audioList.splice(index + 1, ));
+        console.log(this.audioList);
+        localStorage.setItem("audiolist", JSON.stringify(this.audioList));
+      }).catch((err) => {
+        console.log(err);
+        console.log(this.audioList);
+      });
+      // for (a in this.audioList) {
+      //   if (this.audioList[a].fileName == fName) {
+      //     this.audioList.splice(a, 1);
+      //   }
+      // }
+    } else if (ftype == "photo") {
+      this.imageList = this.imageList.splice(0, index).concat(this.imageList.splice(index + 1, ));
+    }
+  }
+
+  removePic(filePath, fileName) {
+    
   }
 
   // private startUpload() {
 
   // }
+
+  public checkUploads() {
+    console.log("checking Uploads");
+  }
   
   onSubmit(value: any): void { 
-    // console.log(value);
+    // console.log("button click");
+    console.log(value);
     var actKey = "";
     // console.log(this.recordingList);
+    console.log(this.audioList);
     this.eventNotes.push({
       "theme": this.theme, 
       "event": this.eventID, 
@@ -221,19 +260,22 @@ export class EventDetailsPage {
       "notes": value["notes"], 
       "tags": value["tags"],
       "audioList": this.audioList,
-      "imageList": this.imageNameList
+      "imageList": this.imageList
     }).then( (item) => { actKey = item.key; } );
     //*** DO VALIDATION TO CHECK THAT THEMES HAS SOMETHING SELECTED
 
     //*** GO TO NEXT PAGE WITH REORDERED LIST OPTIONS
     console.log(this.audioList);
+
+    // Observable.forkJoin()
+    var deleted = 0;
+
     for (var f in this.audioList) {
       console.log("uploading audio list");
       // console.log(this.audioList);
       // var path = this.eventID + "/" + actKey + "/" + this.audioList[f].filename;
       var path = this.eventID + "/" + this.audioList[f].fileName;
 
-      
       // const customMetadata = { 
       //   theme: this.theme,
       //   event: this.eventID, 
@@ -248,50 +290,30 @@ export class EventDetailsPage {
       // var uploadRef = this.storageRef.child(`${this.eventID}/${this.audioList[f].filename}`);
       var uploadRef = this.storageRef.child(path);
 
-      // console.log()
-      // let file = new File();
       var fPath = this.file.externalDataDirectory;
-      
-
       if (this.platform.is('ios')) {
-        // fPath = this.file.documentsDirectory.replace(/file:\/\//g, '');
         fPath = this.file.documentsDirectory;
         console.log(this.audioList[f].fileName);
-        // this.base64.encodeFile(fPath + this.audioList[f].fileName).then((base64File: string) => {
-        //   console.log(base64File);
-        // }, (err) => {
-        //   console.log(err);
-        // })
       }
-      // else {
-        this.file.readAsDataURL(fPath, this.audioList[f].fileName).then( function (audioText) {
-            // console.log(audioText);
-            console.log("reading audio data");
-            uploadRef.putString(audioText, firebase.storage.StringFormat.DATA_URL).then( (snapshot) => {
-              console.log("audio successful upload")
-            });  
-        }).catch(err => {console.log(err)});
-      // }
-
-      
-      // this.storageRef.putString("asdasd");
-      
-      // console.log(var a = this.audioList);
-      // this.storageRef.put(this.audioList[f]).then;
-      // Progress monitoring
-      // this.percentage = this.task.percentageChanges();
-      // this.snapshot   = this.task.snapshotChanges();
-
-      // The file's download URL
-      // this.downloadURL = this.task.downloadURL(); 
-
+      deleted = 0;
+      this.file.readAsDataURL(fPath, this.audioList[f].fileName).then( function (audioText) {
+        // console.log(audioText);
+        // console.log("reading audio data");
+        uploadRef.putString(audioText, firebase.storage.StringFormat.DATA_URL).then( (snapshot) => {
+          console.log("audio successful upload");
+          this.checkUploads();
+        });  
+      }).catch(err => {
+        console.log(err);
+      });
+      console.log("deleting file before call");
+      // this.deleteFile(this.audioList[f].fileName, f, "aud");
+      this.getAudioList();
+      // this.uploadPromises.push(up);
     }
 
     for (var i in this.imageList) {
       console.log("uploading image list");
-      // console.log(this.imageList);
-
-      // var path = this.eventID + "/" +  actKey + "/" + this.imageList[i].fileName;
       var path = this.eventID + "/" + this.imageList[i].fileName;
       const customMetadata = { 
         theme: this.theme,
@@ -300,16 +322,34 @@ export class EventDetailsPage {
         act: this.item, 
         activityKey: actKey
       };
-      // this.storageRef = this.storage.ref(path);
       this.storageRef = firebase.storage().ref();
       var uploadRef = this.storageRef.child(path);
-      // console.log(this.imageList[i].image);
-      // console.log(this.imageList[i].fileName);
-      uploadRef.putString(this.imageList[i].image, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {console.log("successful upload")});
+      uploadRef.putString(this.imageList[i].image, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
+        console.log("successful upload");
+        // this.deleteFile(this.imageList[i].fileName, f, "photo");
+      });
+      // this.deleteFile(this.imageList[i].fileName, f, "photo");
+      // this.uploadPromises.push(up);
     }
     
-    this.audioList = [];
-    localStorage.setItem("audiolist", JSON.stringify(this.audioList));
+    for (var f in this.audioList) {
+      this.deleteFile(this.audioList[i].fileName, f, "aud");
+    }
+    for (var f in this.imageList) {
+      this.deleteFile(this.imageList[i].fileName, f, "photo");
+    }
+
+    // console.log(this.uploadPromises);
+    // forkJoin(this.uploadPromises).subscribe(results => {
+    //   console.log(results); 
+    //   console.log("uploading forkjoin done");
+    //   this.audioList = [];
+    //   localStorage.setItem("audiolist", JSON.stringify(this.audioList));
+    // });
+
+    
+
+
     // this.navCtrl.pop();
     // startUpload();
 

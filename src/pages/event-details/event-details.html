@@ -61,7 +61,7 @@
     <ion-list>
       <ion-item *ngFor="let pic of imageList; index as i;">
         <p>{{pic.fileName}}</p>
-        <button ion-button type="button" clear item-end large (click)="removePicture(pic.fileName, i)"><ion-icon name="trash"></ion-icon></button>
+        <button ion-button type="button" clear item-end large (click)="deleteFile(pic.fileName, i, 'photo')"><ion-icon name="trash"></ion-icon></button>
       </ion-item>
     </ion-list>
 
@@ -83,7 +83,7 @@
       <ion-item *ngFor="let audio of audioList; index as i;">
         <p>{{audio.fileName}}</p>
         <button ion-button type="button" clear item-end large (click)="playAudio(audio.fileName, i)"><ion-icon name="play"></ion-icon></button>
-        <button ion-button type="button" clear item-end large (click)="removeAudio(audio.fileName, i)"><ion-icon name="trash"></ion-icon></button>
+        <button ion-button type="button" clear item-end large (click)="deleteFile(audio.fileName, i, 'aud')"><ion-icon name="trash"></ion-icon></button>
       </ion-item>
     </ion-list>
 

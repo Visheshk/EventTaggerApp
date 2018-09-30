@@ -3,10 +3,6 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-
-import { CloudinaryModule, CloudinaryConfiguration } from '@cloudinary/angular-5.x';
-import { Cloudinary } from 'cloudinary-core';
-
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { ListPage } from '../pages/list/list';
@@ -24,11 +20,11 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Media, MediaObject } from '@ionic-native/media';
 import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions } from '@ionic-native/media-capture';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { HockeyApp } from 'ionic-hockeyapp';
 
 import { File } from '@ionic-native/file';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+// import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { FirebaseProvider } from '../providers/firebase/firebase';
-import { Base64 } from '@ionic-native/base64';
 
 
 @NgModule({
@@ -47,7 +43,6 @@ import { Base64 } from '@ionic-native/base64';
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
-    CloudinaryModule.forRoot({Cloudinary}, { cloud_name: 'visheshk' } as CloudinaryConfiguration),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -68,7 +63,7 @@ import { Base64 } from '@ionic-native/base64';
     Camera,
     File,
     FirebaseProvider,
-    Base64
+    HockeyApp
   ]
 })
 export class AppModule {}
