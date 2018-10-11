@@ -5,6 +5,7 @@ import { Platform, App, MenuController, Nav } from 'ionic-angular';
 
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { ListPage } from '../pages/list/list';
+import { hockeyConfig } from '../environment';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -38,9 +39,9 @@ export class MyApp {
 
     platform.ready().then(() => {
           // The Android ID of the app as provided by the HockeyApp portal. Can be null if for iOS only.
-      let androidAppId = '9e49aeddaa96488891f0a46b52b27618';
+      let androidAppId = hockeyConfig.androidAppId;
       // The iOS ID of the app as provided by the HockeyApp portal. Can be null if for android only.
-      let iosAppId = 'aed7022b0e4340ef9281edfa888e9ae7';
+      let iosAppId = hockeyConfig.iosAppId;
       // Specifies whether you would like crash reports to be automatically sent to the HockeyApp server when the end user restarts the app.
       let autoSendCrashReports = false;
       // Specifies whether you would like to display the standard dialog when the app is about to crash. This parameter is only relevant on Android.
@@ -59,7 +60,7 @@ export class MyApp {
           nav.setRoot(this.rootPage);
         }
       });
-    })
+    });
 
   }
 

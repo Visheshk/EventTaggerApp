@@ -58,13 +58,16 @@ export class HelloIonicPage {
       "eventOrganizer": value.name,
       "themes": value.themes,
       "activities": value.activities
-    }).then( (item) => { pushkey = item.key; } );
+    }).then( (item) => { 
+      pushkey = item.key; 
+      this.nav.push(EventLoggerPage, {"themes": value.themes, "eventID": pushkey});
+    } );
     // .catch(error => this.handleError(error));
 
     console.log(value.name);
     //*** DO VALIDATION TO CHECK THAT THEMES HAS SOMETHING SELECTED
 
     //*** GO TO NEXT PAGE WITH REORDERED LIST OPTOINS
-    this.nav.push(EventLoggerPage, {"themes": value.themes, "eventID": pushkey});
+    
   }
 }

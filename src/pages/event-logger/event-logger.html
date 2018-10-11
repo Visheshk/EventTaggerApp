@@ -17,7 +17,7 @@
   <ng-container *ngFor="let a of actions">
     <ion-list>
       <ion-list-header>{{a.theme}}</ion-list-header>
-      <button ion-item *ngFor="let act of a.acts" (click)="addEvent(act, a.theme)" >
+      <button ion-item *ngFor="let act of a.acts" (click)="addEvent(act, a.theme)" text-wrap>
         {{act}}
       </button>
     </ion-list>

@@ -14,6 +14,9 @@ import { Observable } from 'rxjs/Observable';
 import { forkJoin } from "rxjs/observable/forkJoin";
 import * as firebase from 'firebase';
 
+import { ToastController } from 'ionic-angular';
+
+
 /**
  * Generated class for the EventDetailsPage page.
  *
@@ -58,7 +61,7 @@ export class EventDetailsPage {
 
   // let options: CaptureImageOptions = { limit: 3 };
   
-  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public media: Media, private file: File, public platform: Platform, db: AngularFireDatabase, private afStorage: AngularFireStorage, private camera: Camera) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public formBuilder: FormBuilder, public media: Media, private file: File, public platform: Platform, db: AngularFireDatabase, private afStorage: AngularFireStorage, private camera: Camera, private toastCtrl: ToastController) {
 
     this.item = navParams.data.item;
     this.theme = navParams.data.theme;
@@ -90,9 +93,17 @@ export class EventDetailsPage {
     // this.audioList = [];
     // this.recordingList = [];
     // this.recordingList = [];
-    // this.imageList = [];
+    this.imageList = [];
     // this.imageNameList = [];
     // localStorage.setItem("audiolist", JSON.stringify(this.audioList));
+    for (var f in this.audioList) {
+      this.deleteFile(this.audioList[f].fileName, f, "aud");
+    }
+    // for (var f in this.imageList) {
+    //   this.deleteFile(this.imageList[f].fileName, f, "photo");
+    // }
+
+
   }
 
   getAudioList() {
@@ -245,6 +256,20 @@ export class EventDetailsPage {
   public checkUploads() {
     console.log("checking Uploads");
   }
+
+  public presentToast(msgText){
+    let toast = this.toastCtrl.create({
+      message: msgText,
+      duration: 3000,
+      position: 'bottom'
+    });
+
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+
+    toast.present();
+  }
   
   onSubmit(value: any): void { 
     // console.log("button click");
@@ -261,7 +286,10 @@ export class EventDetailsPage {
       "tags": value["tags"],
       "audioList": this.audioList,
       "imageList": this.imageList
-    }).then( (item) => { actKey = item.key; } );
+    }).then( (item) => { 
+      actKey = item.key; 
+      this.presentToast("note uploaded");
+    } );
     //*** DO VALIDATION TO CHECK THAT THEMES HAS SOMETHING SELECTED
 
     //*** GO TO NEXT PAGE WITH REORDERED LIST OPTIONS
@@ -302,6 +330,7 @@ export class EventDetailsPage {
         uploadRef.putString(audioText, firebase.storage.StringFormat.DATA_URL).then( (snapshot) => {
           console.log("audio successful upload");
           this.checkUploads();
+           this.presentToast("audio uploaded");
         });  
       }).catch(err => {
         console.log(err);
@@ -326,18 +355,19 @@ export class EventDetailsPage {
       var uploadRef = this.storageRef.child(path);
       uploadRef.putString(this.imageList[i].image, firebase.storage.StringFormat.DATA_URL).then((snapshot) => {
         console.log("successful upload");
+        this.presentToast("picture uploaded");
         // this.deleteFile(this.imageList[i].fileName, f, "photo");
       });
       // this.deleteFile(this.imageList[i].fileName, f, "photo");
       // this.uploadPromises.push(up);
     }
     
-    for (var f in this.audioList) {
-      this.deleteFile(this.audioList[i].fileName, f, "aud");
-    }
-    for (var f in this.imageList) {
-      this.deleteFile(this.imageList[i].fileName, f, "photo");
-    }
+    // for (var f in this.audioList) {
+    //   this.deleteFile(this.audioList[f].fileName, f, "aud");
+    // }
+    // for (var f in this.imageList) {
+    //   this.deleteFile(this.imageList[f].fileName, f, "photo");
+    // }
 
     // console.log(this.uploadPromises);
     // forkJoin(this.uploadPromises).subscribe(results => {
