@@ -57,7 +57,7 @@ export class EventDetailsPage {
 
   // audioFile: Promise<MediaFile[]>;
 
-  tags = ['positively', 'negatively', 'willingly', 'reluctantly', 'with encouragement', 'independently', 'riskily', 'half-heartedly'];
+  tags = ['positively', 'negatively', 'willingly', 'reluctantly', 'with encouragement', 'independently', 'riskily', 'half-heartedly', 'intensively', 'defiantly', 'proudly'];
 
   // let options: CaptureImageOptions = { limit: 3 };
   
@@ -327,13 +327,13 @@ export class EventDetailsPage {
       this.file.readAsDataURL(fPath, this.audioList[f].fileName).then( function (audioText) {
         // console.log(audioText);
         // console.log("reading audio data");
-        uploadRef.putString(audioText, firebase.storage.StringFormat.DATA_URL).then( (snapshot) => {
-          console.log("audio successful upload");
-          this.checkUploads();
-           this.presentToast("audio uploaded");
-        });  
-      }).catch(err => {
-        console.log(err);
+        uploadRef.putString(audioText, firebase.storage.StringFormat.DATA_URL).then( 
+          (snapshot) => {
+            console.log("audio successful upload");
+            // this.presentToast("audio uploaded");
+          }).catch ((err) => {console.log("firebase upload " + err)});
+      }).catch((err) => {
+        console.log("read data " + err);
       });
       console.log("deleting file before call");
       // this.deleteFile(this.audioList[f].fileName, f, "aud");

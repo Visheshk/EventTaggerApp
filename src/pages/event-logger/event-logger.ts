@@ -64,41 +64,80 @@ export class EventLoggerPage {
 //     ]
 // };
 
- allActions = 
- {
-    'Engagement': [
-      'Spending time tinkering',
-      'Trying something over and over',
-      'Showing emotions related to making',
-      'Finishing one \"project\" and starting another',
-      'Stopping or abandoning a \"project\" and coming back'
-  ],
-    'Initiative': [
-      'Setting a goal or posing a problem',
-      'Planning steps or strategies for outcomes',
-      'Stating intention to do this again',
-      'Seeking and responding to feedback', 
-      'Persisting towards their goal in face of setback',
-      'Problem solving with new strategy',
-      'Disagreeing with another\'s strategy', 
-      'Taking a risk to try when unsure'
-    ],
-    'Social Scaffolding': [
-      'Requesting or offering help or explanations',
-      'Offering tools or materials to another',
-      'Talking about another\'s work',
-      'Being inspired by another to change their own work',
-      'Physically connecting to another\'s work',
-      'Leaving something behind to share'
-    ],
-    'Development of Understanding': [
-      'Expressing a realization or ah ha moment',
-      'Offering an explanation for a strategy, tool, or outcome',
-      'Connecting to prior knowledge',
-      'Complexifying a set task',
-      'Indicating not knowing something and remaining to explore'
-    ]
-};
+//  allActions = 
+//  {
+//     'Engagement': [
+//       'Spending time tinkering or exploring',
+//       'Trying something over and over',
+//       'Showing emotions related to making',
+//       'Finishing one \"project\" and starting another',
+//       'Stopping a project and coming back'
+//   ],
+//     'Initiative': [
+//       'Setting a goal or posing a problem',
+//       'Planning steps or strategies for outcomes',
+//       'Stating intention to do this again',
+//       'Seeking and responding to feedback', 
+//       'Persisting towards their goal in face of setback',
+//       'Problem solving with new strategy',
+//       'Disagreeing with another\'s strategy', 
+//       'Taking a risk to try when unsure'
+//     ],
+//     'Social Scaffolding': [
+//       'Requesting or offering help or explanations',
+//       'Offering tools or materials to another',
+//       'Talking about another\'s work',
+//       'Being inspired by another to change their own work',
+//       'Physically connecting to another\'s work',
+//       'Leaving something behind to share'
+//     ],
+//     'Development of Understanding': [
+//       'Expressing a realization or ah ha moment',
+//       'Offering an explanation for a strategy, tool, or outcome',
+//       'Connecting to prior knowledge',
+//       'Complexifying a set task',
+//       'Indicating not knowing something and remaining to explore'
+//     ]
+// };
+
+
+  allActions = {
+      'Engagement': [
+        'Spending time tinkering or exploring',
+        'Showing interest or asking questions',
+        'Trying something over and over',
+        'Showing emotions related to their making',
+        'Stopping a project and coming back',
+        'Playing or telling stories with made creations',
+      ],
+      'Initiative': [
+        'Setting a goal or stating an intention',
+        'Being inspired by materials or environment',
+        'Planning steps and strategies',
+        'Wanting to make AGAIN',
+        'Seeking or responding to feedback',
+        'Persisting through a setback',
+        'Taking a risk',
+        ],
+      'Social Scaffolding': [
+        'Requesting or offering help or explanations',
+        'Offering tools or materials to others',
+        'Talking about another\'s work',
+        'Being inspired by another to change their own work',
+        'Physically connecting to another\'s work',
+        'Leaving something behind to share',
+        ],
+      'Development of Understanding': [
+        'Expressing a realization',
+        'Offering an explanation for a strategy, tool, or outcome',
+        'Hacking or repurposing a tool or material',
+        'Repeating a process to test an outcome',
+        'Connecting to prior knowledge',
+        'Complexifying a set task',
+        ]
+    };
+
+
 
 
   // actions = [
